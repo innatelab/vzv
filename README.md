@@ -1,11 +1,11 @@
 # Collection of general scripts for Virginie Girault VZV project using in-house packages
 
 list of other code sources required:<br> 
-- **msglm** [Bayesian Random Effects Linear Models for Mass Spectrometry Data]<br> 
+- **msglm** Bayesian Random Effects Linear Models for Mass Spectrometry Data<br> 
 v0.5.0 https://github.com/innatelab/msglm/tree/v0.5.0 <br> 
 v0.6.0 https://github.com/innatelab/msglm/tree/v0.6.0 <br> 
-- **msimportr** [R package for importing and initial processing of MaxQuant/Spectronaut output] https://github.com/innatelab/msimportr <br> 
-- **HierarchicalHotNet** [Julia implementation of Hierarchical HotNet method] HierarchicalHotNet.jl <br> 
+- **msimportr** R package for importing and initial processing of MaxQuant/Spectronaut output https://github.com/innatelab/msimportr <br> 
+- **HierarchicalHotNet**[Julia implementation of Hierarchical HotNet method https://github.com/alyst/HierarchicalHotNet.jl/tree/v1.1.0 <br> 
 
 ## Affinity-purification of V5-tagged VZV proteins in SK-N-BE2 cells (interactomes)
 requires: **msglm** package v0.5.0 and **msimportr**   <br> 
