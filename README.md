@@ -1,4 +1,4 @@
-# Collection of general scripts for Virginie Girault VZV project using in-house packages
+# Collection of general scripts for VZV proteomics project (Girault et al.) using in-house packages
 
 list of other code sources required:<br> 
 - **msglm** Bayesian Random Effects Linear Models for Mass Spectrometry Data<br> 
@@ -10,7 +10,7 @@ v0.6.0 https://github.com/innatelab/msglm/tree/v0.6.0 <br>
 ## Affinity-purification of V5-tagged VZV proteins in SK-N-BE2 cells (interactomes)
 requires: **msglm** package v0.5.0 and **msimportr**   <br> 
 1. **prepare_data_apms.R** <br> 
-Reads the maxquant output file: ProteinGroups.txt and evidence_fixed.txt <br> 
+Reads the maxquant output file: ProteinGroups.txt and evidence.txt <br> 
 Outputs: <br> 
 msfull.Rdata containing the formated and annotated dataset, with protein groups and peptides intensities.  <br> 
 msglm.Rdata containing the formated and annotated dataset with protein groups intensities, sample associated normalisation shifts, mass spectrometer associated calibration factors, 
@@ -24,7 +24,7 @@ Outputs: <br>
 Bash script instructing the fitting of all the protein groups of the dataset [job_chunk] individually. <br> 
 4. **assemble_fits_apms.R**  <br> 
 Assembles the [job_chunk].Rdata into one.  <br> 
-Outputs excel files containing summarizing the the results per effect per protein and per contrast per protein. <br> 
+Outputs excel files containing summarizing the results per effect per protein and per contrast per protein. <br> 
 The results are compiled into the **Supplementary Table S3, Tab 1 - VZV-Host interactions and Tab 2 - VZV ORF baits**.  <br> 
 
 ## Full proteome changes induced by the depletion of the MPP8 gene in SK-N-BE2 cells
@@ -46,7 +46,7 @@ Outputs: <br>
 Bash script instructing the fitting of all the protein groups of the dataset [job_chunk] individually. <br> 
 4. **assemble_fits_MMP8_KO.R**  <br> 
 Assembles the [job_chunk].Rdata into one.  <br> 
-Outputs an excel file containing summarizing the the results per effect per protein. <br> 
+Outputs an excel file containing summarizing the results per effect per protein. <br> 
 These results are integrated in the compiled **"Complementary omics datasets" Table S5** <br> 
 
 ## Integration of the interactome and effectome data by network diffusion analysis 
