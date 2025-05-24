@@ -1,14 +1,23 @@
-# Collection of general scripts for VZV proteomics project (Girault et al.) using in-house packages
+# Data analysis scripts for *"Varizella-Zoster Virus proteomic profiling" (Girault et al., 2025)* project
 
-list of other code sources required:<br> 
-- **msglm** Bayesian Random Effects Linear Models for Mass Spectrometry Data<br> 
-v0.5.0 https://github.com/innatelab/msglm/tree/v0.5.0 <br> 
-v0.6.0 https://github.com/innatelab/msglm/tree/v0.6.0 <br> 
-- **msimportr** R package for importing and initial processing of MaxQuant/Spectronaut output https://github.com/innatelab/msimportr <br> 
-- **HierarchicalHotNet**[Julia implementation of Hierarchical HotNet method https://github.com/alyst/HierarchicalHotNet.jl/tree/v1.1.0 <br> 
+## In-house Bioinformatics Packages
 
-## Affinity-purification of V5-tagged VZV proteins in SK-N-BE2 cells (interactomes)
-requires: **msglm** package v0.5.0 and **msimportr**   <br> 
+These in-house R and Julia packages are used by the VZV data analysis scripts:
+
+- [**msglm**](https://github.com/innatelab/msglm), Bayesian Mixed Effects Linear Models for Mass Spectrometry Data (*R*):
+   - [v0.5.0](https://github.com/innatelab/msglm/tree/v0.5.0)
+   - [v0.6.0](https://github.com/innatelab/msglm/tree/v0.6.0)
+- [**msimportr**](https://github.com/innatelab/msimportr), importing and pre-processing of MaxQuant/Spectronaut output (*R*):
+   - [v0.3.0](https://github.com/innatelab/msimportr/tree/v0.3.0)
+- [**HierarchicalHotNet.jl**](https://github.com/alyst/HierarchicalHotNet.jl),
+  Julia implementation of [Hierarchical HotNet method](https://academic.oup.com/bioinformatics/article/34/17/i972/5093236):
+   - [v1.1.0](https://github.com/alyst/HierarchicalHotNet.jl/tree/v1.1.0)
+
+## Analysis of VZV Interactome AP-MS Data
+
+The analysis of affinity-purification of V5-tagged VZV proteins in SK-N-BE2 cells requires
+**msglm** package v0.5.0 and **msimportr** v0.3.0.
+
 1. **prepare_data_apms.R** <br> 
 Reads the maxquant output file: ProteinGroups.txt and evidence.txt <br> 
 Outputs: <br> 
@@ -27,8 +36,11 @@ Assembles the [job_chunk].Rdata into one.  <br>
 Outputs excel files containing summarizing the results per effect per protein and per contrast per protein. <br> 
 The results are compiled into the **Supplementary Table S3, Tab 1 - VZV-Host interactions and Tab 2 - VZV ORF baits**.  <br> 
 
-## Full proteome changes induced by the depletion of the MPP8 gene in SK-N-BE2 cells
-requires: **msglm** package v.0.6.0 and **msimportr** <br> 
+## Proteome Regulation Analysis
+
+The analysis of proteomic changes induced by the depletion of the MPP8 gene in SK-N-BE2 cells
+requires **msglm** package v.0.6.0 and **msimportr** v0.3.0
+
 1. **prepare_data_MPP8_KO.R**  <br> 
 Reads the maxquant output files: peptides.txt and evidence.txt  <br> 
 Protein groups are refined via the protregroup.jl script -  <br> 
@@ -49,17 +61,23 @@ Assembles the [job_chunk].Rdata into one.  <br>
 Outputs an excel file containing summarizing the results per effect per protein. <br> 
 These results are integrated in the compiled **"Complementary omics datasets" Table S5** <br> 
 
-## Integration of the interactome and effectome data by network diffusion analysis 
-requires:**HierarchicalHotNet** <br> 
-1. **hotnet_analysis.jl**  <br> 
-General script for the hotnet analysis, dependent on results from 2. and 4. <br> 
+## Integration of the interactome and effectome data
+
+The integration of VZV virus-host interactome and effectome (proteomic changes induced by the expression of specific viral proteins)
+is done by diffusing the protemic signals over the global network of physical and functional protein interactions within the host cell
+([*ReactomeFI* database](https://reactome.org/tools/reactome-fiviz) is used).
+It is implemented in [Julia](https://julialang.org/) and uses in-house [**HierarchicalHotNet.jl**](https://github.com/alyst/HierarchicalHotNet.jl)
+package.
+
+1. **hotnet_analysis.jl** <br> 
+General script for the hotnet analysis, dependent on results from 2. and 4.<br> 
 Maps the Interactome and Effectome hits on ReactomeFI. Tests the significance of the generated edges of the network against permuted data-based networks.  <br> 
 2. **hotnet_treestats_chunks.jl** <br> 
-Calculates Strongly Connected Component Tree statistic per viral bait.  <br> 
-associated bash script: **hotnet_treestats_chunk.lrz.sh**  <br> 
+Calculates Strongly Connected Component Tree statistic per viral bait.<br> 
+associated bash script: **hotnet_treestats_chunk.lrz.sh**<br> 
 Bash script  <br> 
 3. **hotnet_perm_chunk.jl** <br> 
-Generate 1000 permuted tree per bait and calculate SCC tree statistics.  <br> 
-associated bash script: **hotnet_perm_chunk.lrz.sh**  <br> 
-4. **hotnet_perm_chunk_assemble.jl** <br> 
-Assembles Hotnet permuted tree results.  <br> 
+Generate 1000 permuted tree per bait and calculate SCC tree statistics.<br>
+associated bash script: **hotnet_perm_chunk.lrz.sh**<br>
+4. **hotnet_perm_chunk_assemble.jl**<br>
+Assembles Hotnet permuted tree results.<br>
