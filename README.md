@@ -1,65 +1,115 @@
-# Collection of general scripts for VZV proteomics project (Girault et al.) using in-house packages
+# Data analysis scripts for *"Varizella-Zoster Virus proteomic profiling" (Girault et al., 2025)* study
 
-list of other code sources required:<br> 
-- **msglm** Bayesian Random Effects Linear Models for Mass Spectrometry Data<br> 
-v0.5.0 https://github.com/innatelab/msglm/tree/v0.5.0 <br> 
-v0.6.0 https://github.com/innatelab/msglm/tree/v0.6.0 <br> 
-- **msimportr** R package for importing and initial processing of MaxQuant/Spectronaut output https://github.com/innatelab/msimportr <br> 
-- **HierarchicalHotNet**[Julia implementation of Hierarchical HotNet method https://github.com/alyst/HierarchicalHotNet.jl/tree/v1.1.0 <br> 
+## In-house Bioinformatics Packages
 
-## Affinity-purification of V5-tagged VZV proteins in SK-N-BE2 cells (interactomes)
-requires: **msglm** package v0.5.0 and **msimportr**   <br> 
-1. **prepare_data_apms.R** <br> 
-Reads the maxquant output file: ProteinGroups.txt and evidence.txt <br> 
-Outputs: <br> 
-msfull.Rdata containing the formated and annotated dataset, with protein groups and peptides intensities.  <br> 
-msglm.Rdata containing the formated and annotated dataset with protein groups intensities, sample associated normalisation shifts, mass spectrometer associated calibration factors, 
-the GLM model description (effects, batch effects, metaconditions and contrasts) with corresponding priors.  <br> 
-2. **msglm_fit_chunk_apms.R** <br> 
-Extracts the data of a single protein group based on its protgroup_id [job_chunk] <br> 
-Fits the Bayesian model on the protein group. <br> 
-Outputs: <br> 
-[job_chunk].Rdata containing the msglm results <br> 
-3. **msglm_fit-chunks_apms.sge.sh** <br> 
-Bash script instructing the fitting of all the protein groups of the dataset [job_chunk] individually. <br> 
-4. **assemble_fits_apms.R**  <br> 
-Assembles the [job_chunk].Rdata into one.  <br> 
-Outputs excel files containing summarizing the results per effect per protein and per contrast per protein. <br> 
-The results are compiled into the **Supplementary Table S3, Tab 1 - VZV-Host interactions and Tab 2 - VZV ORF baits**.  <br> 
+These in-house *R* and *Julia* packages are used by the VZV data analysis scripts:
 
-## Full proteome changes induced by the depletion of the MPP8 gene in SK-N-BE2 cells
-requires: **msglm** package v.0.6.0 and **msimportr** <br> 
-1. **prepare_data_MPP8_KO.R**  <br> 
-Reads the maxquant output files: peptides.txt and evidence.txt  <br> 
-Protein groups are refined via the protregroup.jl script -  <br> 
-Protein groups distinguished by only one specific peptide or with less than 25% different specific peptides are merged to extend the set of peptides used for protein group quantitation and reduce the protein isoform-specific changes. <br> 
-Outputs: <br> 
-msfull.Rdata containing the formated and annotated dataset, with protein groups and peptides intensities.  <br> 
-msglm.Rdata containing the formated and annotated dataset with peptide intensities, sample associated normalisation shifts, mass spectrometer associated calibration factors,  <br> 
-the GLM model description (effects) with corresponding priors.  <br> 
-2. **msglm_fit_chunk_MPP8_KO.R** <br> 
-Extracts the data of a single protein group based on its protgroup_id [job_chunk] <br> 
-Fits the Bayesian model on the protein group. <br> 
-Outputs: <br> 
-[job_chunk].Rdata containing the msglm results <br> 
-3. **msglm_fit-chunks_MPP8_KO.lrz.sh** <br> 
-Bash script instructing the fitting of all the protein groups of the dataset [job_chunk] individually. <br> 
-4. **assemble_fits_MMP8_KO.R**  <br> 
-Assembles the [job_chunk].Rdata into one.  <br> 
-Outputs an excel file containing summarizing the results per effect per protein. <br> 
-These results are integrated in the compiled **"Complementary omics datasets" Table S5** <br> 
+- [**msglm**](https://github.com/innatelab/msglm), Bayesian Mixed Effects Linear Models for Mass Spectrometry Data (*R*):
+  - [v0.5.0](https://github.com/innatelab/msglm/tree/v0.5.0)
+  - [v0.6.0](https://github.com/innatelab/msglm/tree/v0.6.0)
+- [**msimportr**](https://github.com/innatelab/msimportr), importing and pre-processing of MaxQuant/Spectronaut output (*R*):
+  - [v0.3.0](https://github.com/innatelab/msimportr/tree/v0.3.0)
+- [**HierarchicalHotNet.jl**](https://github.com/alyst/HierarchicalHotNet.jl),
+  Julia implementation of [Hierarchical HotNet method](https://academic.oup.com/bioinformatics/article/34/17/i972/5093236):
+  - [v1.1.0](https://github.com/alyst/HierarchicalHotNet.jl/tree/v1.1.0)
 
-## Integration of the interactome and effectome data by network diffusion analysis 
-requires:**HierarchicalHotNet** <br> 
-1. **hotnet_analysis.jl**  <br> 
-General script for the hotnet analysis, dependent on results from 2. and 4. <br> 
-Maps the Interactome and Effectome hits on ReactomeFI. Tests the significance of the generated edges of the network against permuted data-based networks.  <br> 
-2. **hotnet_treestats_chunks.jl** <br> 
-Calculates Strongly Connected Component Tree statistic per viral bait.  <br> 
-associated bash script: **hotnet_treestats_chunk.lrz.sh**  <br> 
-Bash script  <br> 
-3. **hotnet_perm_chunk.jl** <br> 
-Generate 1000 permuted tree per bait and calculate SCC tree statistics.  <br> 
-associated bash script: **hotnet_perm_chunk.lrz.sh**  <br> 
-4. **hotnet_perm_chunk_assemble.jl** <br> 
-Assembles Hotnet permuted tree results.  <br> 
+## Analysis of VZV Interactome AP-MS Data
+
+The analysis of affinity-purification data of V5-tagged VZV proteins in SK-N-BE2 cells requires
+**msglm** (v0.5.0) and **msimportr** (v0.3.0) packages and is performed in the following steps:
+
+1. **prepare_data_apms.R** script
+    - *Reads* the MaxQuant files *ProteinGroups.txt* and *evidence.txt* and prepares the data for statistical analysis.
+    - *Outputs*:
+      - **msfull.RData** containing the formated and annotated dataset, with protein groups and peptides intensities.
+      - **msglm.RData** containing the formated and annotated dataset with protein groups intensities,
+        per-MS run intensity normalisation factors, MS instrument noise model parameters,
+        the GLM model description (matrices of effects, batch effects, and contrasts) including parameter priors.
+2. **msglm_fit_chunk_apms.R** script is called for each protein group (*job chunk*) in the data set
+    - Gets `protgroup_id` as an input
+    - Extracts the data of a given a protein group from **msglm.RData**
+    - Fits the Bayesian model defined in **msglm.RData** using *msglm* package
+    - *Outputs* **<job_chunk>.RData** file with the *msglm* results
+3. **msglm_fit-chunks_apms.sge.sh** is a shell script for the parallel execution of **msglm_fit_chunk_apms.R**
+ on the compute cluster using [SGE job scheduler](https://computing.sas.upenn.edu/gpc/job/sge).
+4. **assemble_fits_apms.R** script assembles all individual **<job_chunk>.RData** files into a single report.
+    - Extracts the significance of relevant model contrasts for each protein group.
+    - Compiles the **Supplementary Table S3, Tab 1 - VZV-Host interactions and Tab 2 - VZV ORF baits** report.
+
+## Analysis of MPP8-induced proteome changes
+
+The analysis of proteomic changes induced by the depletion of the MPP8 gene in SK-N-BE2 cells
+requires **msglm** package (v.0.6.0) and **msimportr** (v0.3.0).
+This analysis closely follows the same steps as the analysis of AP-MS data described above:
+
+1. **prepare_data_MPP8_KO.R**
+    - Reads the MaxQuant files: *peptides.txt* and *evidence.txt*
+    - Corrects protein groups using the **protregroup.jl** script to avoid splitting isoforms of the same
+      gene into individual protein groups that differ only by a single specific peptide
+      (see *Material and Methods* section for details).
+    - *Outputs*:
+      - **msfull.RData** containing the formated and annotated dataset
+        with protein groups and peptides intensities.
+      - **msglm.RData** containing the formated and annotated dataset with peptide intensities,
+        per-MS run intensity normalisation factors, MS instrument noise model parameters,
+        the GLM model description (matrices of effects, batch effects, and contrasts) including parameter priors.
+2. **msglm_fit_chunk_MPP8_KO.R** script is called for each protein group (*job chunk*) in the data set
+    - Gets `protgroup_id` as an input
+    - Extracts the data of a given a protein group from **msglm.RData**
+    - Fits the Bayesian model defined in **msglm.RData** using *msglm* package
+    - *Outputs* **<job_chunk>.RData** file with the *msglm* results
+3. **msglm_fit-chunks_MPP8_KO.lrz.sh** is a shell script for the parallel execution of
+   **msglm_fit_chunk_MPP8_KO.R** on the compute cluster using
+   [SLURM workload manager](https://slurm.schedmd.com/sbatch.html).
+4. **assemble_fits_MMP8_KO.R** script assembles all individual **<job_chunk>.RData**
+   files into a single report.
+    - Extracts the significance of relevant model contrasts for each protein group.
+    - Compiles the **"Complementary omics datasets" Table S5**
+
+## Integration of the interactome and effectome data
+
+The integration of VZV virus-host *interactome* (virus-host protein interaction)
+and *effectome* (proteomic changes induced by the expression of individual viral proteins)
+is done by diffusing the protein abundance perturbations over the global network of
+protein-protein and functional gene interactions within the host cell
+([*ReactomeFI* database](https://reactome.org/tools/reactome-fiviz) is used).
+It is implemented in [Julia](https://julialang.org/) and uses in-house
+[**HierarchicalHotNet.jl**](https://github.com/alyst/HierarchicalHotNet.jl) package
+that implements *Hierarchical HotNet* method and provides additional statistics
+for the network diffusion process.
+
+1. **hotnet_analysis.jl** is the general script for the HotNet analysis:
+    - Reads the interactome and effectome (the results of the *msglm* analysis).
+    - Reads the *ReactomeFI* network of protein-protein and functional gene interactions.
+    - Prepares the effectome-based nodes and edges weights for the *HotNet* network diffusion
+      analysis of each viral bait (step 2).
+    - Prepares the 1000 random permutations of node and edge weights per viral protein for step 3
+      and saves them in **hotnet_perm_input.jlser.zst** file.
+    - Reads the network diffusion results from step 2 and
+      the combined permutation statistics from step 4 (**hotnet_perm_assembled_<viral_protein>.jlser.zst**).
+    - Identifies the significant interactions between the host proteins physically associated
+      with viral proteins (interactome) and the proteins effected by viral proteins overexpression
+      (effectome)
+    - *Outputs* the **Supplementary Table S4 - HotNet analysis results (FIXME)** with the
+      significant interactions between the host proteins and viral proteins.
+2. **hotnet_treestats_chunks.jl**
+    - Performs *HotNet* network diffusion to integrate interactome and effectome for each viral protein
+      using unperturbed weights.
+    - Calculates the *Strongly Connected Component Tree* statistics for each edge weight cutoff threshold.
+    - *Outputs* the **hotnet_treestats_<viral_protein>.jlser.zst** file with the
+      *HotNet* network diffusion results for each viral protein.
+    - **hotnet_treestats_chunk.lrz.sh** is the associated *SLURM* job script for parallel execution on
+      the compute cluster.
+3. **hotnet_perm_chunk.jl**
+    - Reads a block of random effectome weights permutations (*job chunk*)
+      from **hotnet_perm_input.jlser.zst** generated at step 1.
+    - Performs memory and computationally intensive network diffusion for each
+      weights permutation of the given *job chunk*.
+    - Calculates the *Strongly Connected Component Tree* statistics for each edge weight cutoff threshold.
+    - *Outputs* the **hotnet_perm_<job_chunk>.jlser.zst** file.
+    - **hotnet_perm_chunk.lrz.sh** is the associated *SLURM* shell script for the parallel
+      execution on the compute cluster.
+4. **hotnet_perm_chunk_assemble.jl**
+    - assembles the HotNet permuted tree results (**hotnet_perm_<job_chunk>.jlser.zst**)
+      generated at step 3
+    - *Outputs* the combined permutation statistics (**hotnet_perm_assembled_<viral_protein>.jlser.zst**).
