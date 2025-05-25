@@ -36,7 +36,7 @@ The analysis of affinity-purification data of V5-tagged VZV proteins in SK-N-BE2
     - Extracts the significance of relevant model contrasts for each protein group.
     - Compiles the **Supplementary Table S3, Tab 1 - VZV-Host interactions and Tab 2 - VZV ORF baits** report.
 
-## Analysis of MPP8-induces proteome changes
+## Analysis of MPP8-induced proteome changes
 
 The analysis of proteomic changes induced by the depletion of the MPP8 gene in SK-N-BE2 cells
 requires **msglm** package (v.0.6.0) and **msimportr** (v0.3.0).
