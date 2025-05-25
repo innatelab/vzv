@@ -89,7 +89,7 @@ for the network diffusion process.
     - Reads the network diffusion results from step 2 and
       the combined permutation statistics from step 4 (**hotnet_perm_assembled_<viral_protein>.jlser.zst**).
     - Identifies the significant interactions between the host proteins physically associated
-      with viral proteins (interactome) and the proteins effected by virial proteins overexpression
+      with viral proteins (interactome) and the proteins effected by viral proteins overexpression
       (effectome)
     - *Outputs* the **Supplementary Table S4 - HotNet analysis results (FIXME)** with the
       significant interactions between the host proteins and viral proteins.
