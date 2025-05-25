@@ -80,7 +80,7 @@ for the network diffusion process.
 
 1. **hotnet_analysis.jl** is the general script for the HotNet analysis:
     - Reads the interactome and effectome (the results of the *msglm* analysis).
-    - Reads the *ReacomeFI* network of protein-protein and functional gene interactions.
+    - Reads the *ReactomeFI* network of protein-protein and functional gene interactions.
     - Conducts the *HotNet* analysis for unperturbed interactome and effectome data
     - Prepares the nodes and edges weights for the *HotNet* network diffusion
       analysis of each viral bait (step 2).
