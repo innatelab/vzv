@@ -28,7 +28,7 @@ The analysis of affinity-purification data of V5-tagged VZV proteins in SK-N-BE2
 2. **msglm_fit_chunk_apms.R** script is called for each protein group (*job chunk*) in the data set
     - Gets `protgroup_id` as an input
     - Extracts the data of a given a protein group from **msglm.RData**
-    - Fits the Bayesian model defined **msglm.RData** using *msglm* package
+    - Fits the Bayesian model defined in **msglm.RData** using *msglm* package
     - *Outputs* **<job_chunk>.RData** file with the *msglm* results
 3. **msglm_fit-chunks_apms.sge.sh** is a shell script for the parallel execution of **msglm_fit_chunk_apms.R**
  on the compute cluster using [SGE job scheduler](https://computing.sas.upenn.edu/gpc/job/sge).
@@ -56,7 +56,7 @@ This analysis closely follows the same steps as the analysis of AP-MS data descr
 2. **msglm_fit_chunk_MPP8_KO.R** script is called for each protein group (*job chunk*) in the data set
     - Gets `protgroup_id` as an input
     - Extracts the data of a given a protein group from **msglm.RData**
-    - Fits the Bayesian model defined **msglm.RData** using *msglm* package
+    - Fits the Bayesian model defined in **msglm.RData** using *msglm* package
     - *Outputs* **<job_chunk>.RData** file with the *msglm* results
 3. **msglm_fit-chunks_MPP8_KO.lrz.sh** is a shell script for the parallel execution of
    **msglm_fit_chunk_MPP8_KO.R** on the compute cluster using
