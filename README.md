@@ -81,8 +81,7 @@ for the network diffusion process.
 1. **hotnet_analysis.jl** is the general script for the HotNet analysis:
     - Reads the interactome and effectome (the results of the *msglm* analysis).
     - Reads the *ReactomeFI* network of protein-protein and functional gene interactions.
-    - Conducts the *HotNet* analysis for unperturbed interactome and effectome data
-    - Prepares the nodes and edges weights for the *HotNet* network diffusion
+    - Prepares the effectome-based nodes and edges weights for the *HotNet* network diffusion
       analysis of each viral bait (step 2).
     - Prepares the 1000 random permutations of node and edge weights per viral protein for step 3
       and saves them in **hotnet_perm_input.jlser.zst** file.
@@ -94,16 +93,18 @@ for the network diffusion process.
     - *Outputs* the **Supplementary Table S4 - HotNet analysis results (FIXME)** with the
       significant interactions between the host proteins and viral proteins.
 2. **hotnet_treestats_chunks.jl**
-    - Performs *HotNet* network diffusion to integrate interactome and effectome for each viral protein.
+    - Performs *HotNet* network diffusion to integrate interactome and effectome for each viral protein
+      using unperturbed weights.
     - Calculates the *Strongly Connected Component Tree* statistics for each edge weight cutoff threshold.
     - *Outputs* the **hotnet_treestats_<viral_protein>.jlser.zst** file with the
       *HotNet* network diffusion results for each viral protein.
     - **hotnet_treestats_chunk.lrz.sh** is the associated *SLURM* job script for parallel execution on
       the compute cluster.
 3. **hotnet_perm_chunk.jl**
-    - Reads the random interactome and effectome permutations from **hotnet_perm_input.jlser.zst**.
-    - Performs memory and computationally intensive network diffusion for a block of random
-      interactome and effectome permutations generated at step 1.
+    - Reads a block of random effectome weights permutations (*job chunk*)
+      from **hotnet_perm_input.jlser.zst** generated at step 1.
+    - Performs memory and computationally intensive network diffusion for each
+      weights permutation of the given *job chunk*.
     - Calculates the *Strongly Connected Component Tree* statistics for each edge weight cutoff threshold.
     - *Outputs* the **hotnet_perm_<job_chunk>.jlser.zst** file.
     - **hotnet_perm_chunk.lrz.sh** is the associated *SLURM* shell script for the parallel
