@@ -51,7 +51,7 @@ This analysis closely follows the same steps as the analysis of AP-MS data descr
       - **msfull.RData** containing the formated and annotated dataset
         with protein groups and peptides intensities.
       - **msglm.RData** containing the formated and annotated dataset with peptide intensities,
-        per-MS run instensity normalisation factors, MS instrument noise model parameters,
+        per-MS run intensity normalisation factors, MS instrument noise model parameters,
         the GLM model description (matrices of effects, batch effects, and contrasts) including parameter priors.
 2. **msglm_fit_chunk_MPP8_KO.R** script is called for each protein group (*job chunk*) in the data set
     - Gets `protgroup_id` as an input
