@@ -1,6 +1,4 @@
-# Data analysis scripts for *"Varizella-Zoster Virus proteomic profiling" (Girault et al., 2025)* study
-
-## In-house Bioinformatics Packages
+## Collection of general scripts for *"Varizella-Zoster Virus proteomic profiling" (Girault et al., 2025)* study using in-hous packages
 
 These in-house *R* and *Julia* packages are used by the VZV data analysis scripts:
 
@@ -13,7 +11,7 @@ These in-house *R* and *Julia* packages are used by the VZV data analysis script
   Julia implementation of [Hierarchical HotNet method](https://academic.oup.com/bioinformatics/article/34/17/i972/5093236):
   - [v1.1.0](https://github.com/alyst/HierarchicalHotNet.jl/tree/v1.1.0)
 
-## Analysis of VZV Interactome AP-MS Data
+##  Affinity-purification of V5-tagged VZV proteins in SK-N-BE2 cells (interactomes)
 
 The analysis of affinity-purification data of V5-tagged VZV proteins in SK-N-BE2 cells requires
 **msglm** (v0.5.0) and **msimportr** (v0.3.0) packages and is performed in the following steps:
@@ -34,13 +32,12 @@ The analysis of affinity-purification data of V5-tagged VZV proteins in SK-N-BE2
  on the compute cluster using [SGE job scheduler](https://computing.sas.upenn.edu/gpc/job/sge).
 4. **assemble_fits_apms.R** script assembles all individual **<job_chunk>.RData** files into a single report.
     - Extracts the significance of relevant model contrasts for each protein group.
-    - Compiles the **Supplementary Table S3, Tab 1 - VZV-Host interactions and Tab 2 - VZV ORF baits** report.
+    - The results are compiled into the **Supplementary Table S3, Tab 1 - VZV-Host interactions and Tab 2 - VZV ORF baits**.
 
-## Analysis of MPP8-induced proteome changes
+## Full proteome changes induced by the depletion of the MPP8 gene in SK-N-BE2 cells
 
 The analysis of proteomic changes induced by the depletion of the MPP8 gene in SK-N-BE2 cells
 requires **msglm** package (v.0.6.0) and **msimportr** (v0.3.0).
-This analysis closely follows the same steps as the analysis of AP-MS data described above:
 
 1. **prepare_data_MPP8_KO.R**
     - Reads the MaxQuant files: *peptides.txt* and *evidence.txt*
@@ -52,9 +49,9 @@ This analysis closely follows the same steps as the analysis of AP-MS data descr
         with protein groups and peptides intensities.
       - **msglm.RData** containing the formated and annotated dataset with peptide intensities,
         per-MS run intensity normalisation factors, MS instrument noise model parameters,
-        the GLM model description (matrices of effects, batch effects, and contrasts) including parameter priors.
+        the GLM model description (matrices of effects) including parameter priors.
 2. **msglm_fit_chunk_MPP8_KO.R** script is called for each protein group (*job chunk*) in the data set
-    - Gets `protgroup_id` as an input
+    - Gets `protregroup_id` as an input
     - Extracts the data of a given a protein group from **msglm.RData**
     - Fits the Bayesian model defined in **msglm.RData** using *msglm* package
     - *Outputs* **<job_chunk>.RData** file with the *msglm* results
@@ -64,9 +61,9 @@ This analysis closely follows the same steps as the analysis of AP-MS data descr
 4. **assemble_fits_MMP8_KO.R** script assembles all individual **<job_chunk>.RData**
    files into a single report.
     - Extracts the significance of relevant model contrasts for each protein group.
-    - Compiles the **"Complementary omics datasets" Table S5**
+    - These results are integrated in the compiled **"Complementary omics datasets" Table S5**
 
-## Integration of the interactome and effectome data
+## Integration of the interactome and effectome data by network diffusion analysis
 
 The integration of VZV virus-host *interactome* (virus-host protein interaction)
 and *effectome* (proteomic changes induced by the expression of individual viral proteins)
